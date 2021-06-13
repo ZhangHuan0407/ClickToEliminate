@@ -3,7 +3,7 @@
     public enum BlockType
     {
         None = 0x00,
-        Block = 0x01,
+        Color = 0x01,
         Floor = 0x02,
         Factory = 0x03,
 

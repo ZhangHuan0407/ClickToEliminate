@@ -19,7 +19,7 @@ namespace CTE
         /// <summary>
         /// 场景当前的砖块状态
         /// </summary>
-        public static Block[,] Blocks;
+        public static IBlock[,] Blocks;
 
         /* func */
 

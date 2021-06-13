@@ -2,7 +2,7 @@
 
 namespace CTE
 {
-    public interface Block
+    public interface IBlock
     {
         /* field */
         BlockType BlockType { get; }
@@ -16,8 +16,10 @@ namespace CTE
         /// </summary>
         void BreakCheck();
         /// <summary>
-        /// 砖块破碎一次
+        /// 临近砖块破碎一次
         /// </summary>
-        void BreakOnce();
+        /// <param name="blockType">起始破碎砖块类型</param>
+        void NearlyBreakOnce(BlockType blockType);
+        void PlayBreakAnimation();
     }
 }
