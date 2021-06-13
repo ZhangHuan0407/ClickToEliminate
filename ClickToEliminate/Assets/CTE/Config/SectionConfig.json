@@ -1,0 +1,12 @@
+{
+  "DataSet": [
+    {
+      "SectionIndex": 1,
+      "LevelIndex": [ 1, 2, 3, 4, 5 ]
+    },
+    {
+      "SectionIndex": 2,
+      "LevelIndex": [ 6, 7, 8, 9, 10 ]
+    }
+  ]
+}

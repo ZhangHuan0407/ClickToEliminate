@@ -6,9 +6,9 @@
     /// </summary>
     public partial class Table<TKey, TData> where TData : class, IDataItem<TKey>, new()
     {
-        internal class JsonTable<_TData> where _TData : class, IDataItem<TKey>, new()
+        public class JsonTable<_TData> where _TData : class, IDataItem<TKey>, new()
         {
-            internal _TData[] DataSet;
+            public _TData[] DataSet;
         }
     }
 }
