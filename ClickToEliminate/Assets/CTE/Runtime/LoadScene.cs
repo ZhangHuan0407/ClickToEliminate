@@ -1,4 +1,5 @@
 ﻿using Database;
+using Newtonsoft.Json;
 using Tween;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -20,7 +21,14 @@ namespace CTE
             TextAsset textAsset = UnityEditor.AssetDatabase.LoadAssetAtPath<TextAsset>($"Assets/CTE/Config/{nameof(GameData.SectionConfig)}.json");
             GameData.SectionConfig = Table<int, SectionData>.LoadTableFromJson(nameof(GameData.SectionConfig), textAsset.text);
             textAsset = UnityEditor.AssetDatabase.LoadAssetAtPath<TextAsset>($"Assets/CTE/Config/{nameof(GameData.MapConfig)}.json");
-            GameData.MapConfig = Table<int, SectionData>.LoadTableFromJson(nameof(GameData.MapConfig), textAsset.text);
+            GameData.MapConfig = Table<int, MapData>.LoadTableFromJson(nameof(GameData.MapConfig), textAsset.text);
+
+            string content = PlayerPrefs.GetString(nameof(PlayerRecord));
+            if (string.IsNullOrEmpty(content))
+                GameData.PlayerRecord = new PlayerRecord();
+            else
+                GameData.PlayerRecord = JsonConvert.DeserializeObject<PlayerRecord>(content);
+            GameData.PlayerRecord.TryFixRecord();
 
             SceneManager.LoadScene("SelectionScene", LoadSceneMode.Single);
         }

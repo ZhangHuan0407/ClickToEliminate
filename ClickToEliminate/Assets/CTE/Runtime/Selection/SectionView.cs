@@ -1,5 +1,7 @@
-﻿using Tween;
+﻿using System;
+using Tween;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace CTE
@@ -7,12 +9,11 @@ namespace CTE
     /// <summary>
     /// 展示所有的章节，分页展示左右切换
     /// </summary>
-    public class SelectionView : MonoBehaviour
+    public class SectionView : MonoBehaviour
     {
         /* field */
         public Section SectionA;
         public Section SectionB;
-        [Range(1, 100)]
         public int NowSection;
         private int m_SectionMaxValue;
 
@@ -21,6 +22,8 @@ namespace CTE
 
         public Button LeftButton;
         public Button RightButton;
+
+        public bool HaveSelectLevel;
 
         /* inter */
         
@@ -40,7 +43,7 @@ namespace CTE
 
         private void Awake()
         {
-            NowSection = 1;
+            NowSection = 0;
             m_SectionMaxValue = GameData.SectionConfig.Count;
         }
         private void Start()
@@ -52,14 +55,28 @@ namespace CTE
             (SectionA.transform as RectTransform).anchoredPosition = Vector2.zero;
             SectionA.Refresh();
 
-            LeftButton.gameObject.SetActive(NowSection > 1);
-            RightButton.gameObject.SetActive(NowSection < m_SectionMaxValue);
+            LeftButton.gameObject.SetActive(NowSection > 0);
+            RightButton.gameObject.SetActive(NowSection < m_SectionMaxValue - 1);
         }
 
         /* func */
+        public void SelectLevel(int levelIndex)
+        {
+            if (HaveSelectLevel)
+                return;
+
+            HaveSelectLevel = true;
+            LeftButton.interactable = false;
+            RightButton.interactable = false;
+            MapData map = GameData.Map = GameData.MapConfig[levelIndex];
+            GameData.Blocks = new Block[map.Blocks.GetLength(0), map.Blocks.GetLength(1)];
+            SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+            SectionA.SetInteractable(false);
+        }
+
         public void OnClickLeftButton()
         {
-            if (NowSection <= 1)
+            if (NowSection < 0)
                 return;
 
             Section temp = SectionB;
@@ -68,8 +85,9 @@ namespace CTE
 
             NowSection--;
             SectionA.SectionIndex = NowSection;
-            LeftButton.gameObject.SetActive(NowSection > 1);
-            RightButton.gameObject.SetActive(NowSection < m_SectionMaxValue);
+            SectionA.Refresh();
+            LeftButton.gameObject.SetActive(NowSection > 0);
+            RightButton.gameObject.SetActive(NowSection < m_SectionMaxValue - 1);
             LeftButton.interactable = false;
             RightButton.interactable = false;
             (SectionA.transform as RectTransform)
@@ -80,10 +98,13 @@ namespace CTE
                     LeftButton.interactable = true;
                     RightButton.interactable = true;
                 };
+            (SectionB.transform as RectTransform)
+                .DoAnchoredPosition(new Vector2(Width, 0f), 0.5f)
+                .DoIt();
         }
         public void OnClickRightButton()
         {
-            if (NowSection >= m_SectionMaxValue)
+            if (NowSection >= m_SectionMaxValue - 1)
                 return;
 
             Section temp = SectionB;
@@ -92,8 +113,9 @@ namespace CTE
 
             NowSection++;
             SectionA.SectionIndex = NowSection;
-            LeftButton.gameObject.SetActive(NowSection > 1);
-            RightButton.gameObject.SetActive(NowSection < m_SectionMaxValue);
+            SectionA.Refresh();
+            LeftButton.gameObject.SetActive(NowSection > 0);
+            RightButton.gameObject.SetActive(NowSection < m_SectionMaxValue - 1);
             LeftButton.interactable = false;
             RightButton.interactable = false;
             (SectionA.transform as RectTransform)
@@ -104,6 +126,9 @@ namespace CTE
                     LeftButton.interactable = true;
                     RightButton.interactable = true;
                 };
+            (SectionB.transform as RectTransform)
+                .DoAnchoredPosition(new Vector2(-Width, 0f), 0.5f)
+                .DoIt();
         }
     }
 }
