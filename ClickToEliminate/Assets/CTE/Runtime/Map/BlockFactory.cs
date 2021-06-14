@@ -24,8 +24,50 @@ namespace CTE
         }
 
         /* func */
+        public IBlock CreateBlock(BlockType blockType)
+        {
+            if (blockType == BlockType.Color)
+                switch (UnityEngine.Random.Range(0, 3))
+                {
+                    case 0:
+                        blockType = BlockType.Red;
+                        break;
+                    case 1:
+                        blockType = BlockType.Green;
+                        break;
+                    case 2:
+                        blockType = BlockType.Yellow;
+                        break;
+                    case 3:
+                        blockType = BlockType.Blue;
+                        break;
+                }
 
-
+            switch (blockType)
+            {
+                case BlockType.Red:
+                    return Instantiate(BlockRed).GetComponent<IBlock>();
+                case BlockType.Green:
+                    return Instantiate(BlockGreen).GetComponent<IBlock>();
+                case BlockType.Yellow:
+                    return Instantiate(BlockYellow).GetComponent<IBlock>();
+                case BlockType.Blue:
+                    return Instantiate(BlockBlue).GetComponent<IBlock>();
+                //case BlockType.RocketVertical:
+                //    break;
+                //case BlockType.RocketHorizontal:
+                //    break;
+                case BlockType.None:
+                    return new BlockNone();
+                case BlockType.Floor:
+                    return Instantiate(BlockFloor).GetComponent<IBlock>();
+                // case BlockType.Color:
+                // case BlockType.Factory:
+                default:
+                    throw new NotImplementedException();
+                    break;
+            }
+        }
 
         /* IBlock */
         public void BreakCheck()

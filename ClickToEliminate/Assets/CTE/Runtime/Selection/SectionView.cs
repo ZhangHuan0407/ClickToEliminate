@@ -68,8 +68,7 @@ namespace CTE
             HaveSelectLevel = true;
             LeftButton.interactable = false;
             RightButton.interactable = false;
-            MapData map = GameData.Map = GameData.MapConfig[levelIndex];
-            GameData.Blocks = new IBlock[map.Blocks.GetLength(0), map.Blocks.GetLength(1)];
+            CTEGame.StartNewGame(levelIndex);
             SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
             SectionA.SetInteractable(false);
         }

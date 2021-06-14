@@ -6,6 +6,8 @@
         Color = 0x01,
         Floor = 0x02,
         Factory = 0x03,
+        RocketVertical = 0x04,
+        RocketHorizontal = 0x05,
 
         Red = 0x10,
         Green = 0x11,

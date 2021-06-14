@@ -1,7 +1,5 @@
 ﻿using Database;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 
 namespace CTE
 {
@@ -10,6 +8,7 @@ namespace CTE
         /* field */
         public int LevelIndex { get; set; }
         public BlockType[,] Blocks;
+        public int MaxClickTime = 1;
 
         /* inter */
         [JsonIgnore]
