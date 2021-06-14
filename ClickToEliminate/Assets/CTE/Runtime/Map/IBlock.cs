@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace CTE
 {
@@ -9,6 +10,7 @@ namespace CTE
         int MapX { get; set; }
         int MapY { get; set; }
         bool WillDestroy { get; set; }
+        Transform transform { get; }
 
         /* func */
         /// <summary>

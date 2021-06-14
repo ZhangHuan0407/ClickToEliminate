@@ -14,6 +14,7 @@ namespace CTE
         public int MapX { get; set; }
         public int MapY { get; set; }
         public bool WillDestroy { get; set; }
+        Transform IBlock.transform => transform;
 
         /* ctor */
         public BlockColor()

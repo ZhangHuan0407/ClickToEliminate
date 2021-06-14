@@ -1,4 +1,6 @@
-﻿namespace CTE
+﻿using UnityEngine;
+
+namespace CTE
 {
     public class BlockNone : IBlock
     {
@@ -7,6 +9,7 @@
         public int MapX { get; set; }
         public int MapY { get; set; }
         public bool WillDestroy { get => false; set => _ = value; }
+        Transform IBlock.transform => null;
 
         /* ctor */
         public BlockNone()
