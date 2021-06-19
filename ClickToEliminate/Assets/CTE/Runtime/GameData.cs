@@ -39,5 +39,17 @@ namespace CTE
             string content = JsonConvert.SerializeObject(PlayerRecord);
             PlayerPrefs.SetString(nameof(PlayerRecord), content);
         }
+
+        /* Asset Bundle */
+#if UseAssetBundle
+        public static Dictionary<string, AssetBundle> AllAssetBundles;
+        public static void LoadAssetBundle(byte[] data)
+        {
+            AssetBundle assetBundle = AssetBundle.LoadFromMemory(data);
+            AllAssetBundles = AllAssetBundles ?? new Dictionary<string, AssetBundle>();
+            AllAssetBundles.Add(assetBundle.name, assetBundle);
+            Debug.Log($"load {assetBundle.name}, {data.Length / 1024} KB");
+        }
+#endif
     }
 }

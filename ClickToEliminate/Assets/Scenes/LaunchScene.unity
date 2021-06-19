@@ -208,3 +208,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TweenService: {fileID: 267649059}
+  AssetBundleUri:
+  - File:///AssetBundles/cte/config.assetbundle
+  - File:///AssetBundles/cte/prefab.assetbundle

@@ -12,11 +12,7 @@ namespace CTE
         /* field */
         public static LinkedList<Tweener> GameAnimation;
 
-        /// <summary>
-        /// 砖块工厂对应的预制体资源
-        /// </summary>
-        public GameObject BlockFactory;
-
+        private GameObject m_BlockFactory;
         /// <summary>
         /// 默认砖块工厂对应的场景引用
         /// </summary>
@@ -39,7 +35,12 @@ namespace CTE
         /* ctor */
         private void Start()
         {
-            CommonFactory = Instantiate(BlockFactory, transform).GetComponent<BlockFactory>();
+#if UseAssetBundle
+            m_BlockFactory = GameData.AllAssetBundles["cte/prefab.assetbundle"].LoadAsset<GameObject>("Factory");
+#else
+            m_BlockFactory = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>($"Assets/CTE/Prefab/Factory.prefab");
+#endif
+            CommonFactory = Instantiate(m_BlockFactory, transform).GetComponent<BlockFactory>();
             CommonFactory.transform.position = new Vector3(-100f, 0f, 0f);
 
             MapTransform = transform;
@@ -66,7 +67,7 @@ namespace CTE
                     GameData.BlockTypes[indexX, indexY] = blockType;
                     IBlock block;
                     if (blockType == BlockType.Factory)
-                        block = GameData.Blocks[indexX, indexY] = Instantiate(BlockFactory).GetComponent<IBlock>();
+                        block = GameData.Blocks[indexX, indexY] = Instantiate(m_BlockFactory).GetComponent<IBlock>();
                     else
                         block = GameData.Blocks[indexX, indexY] = CommonFactory.CreateBlock(blockType);
                     if (block.transform is RectTransform rectTransform)
@@ -230,7 +231,7 @@ namespace CTE
 
             if (waitAndDelayInvoke)
             {
-                yield return TimeTween.DoTime(0.2f);
+                yield return TimeTween.DoTime(0.3f);
                 LogicTweener createAndShiftBlockTweener = new LogicTweener();
                 createAndShiftBlockTweener.SetLogic(CreateAndShiftBlock(createAndShiftBlockTweener));
                 GameAnimation.AddAfter(GameAnimation.First, createAndShiftBlockTweener);
