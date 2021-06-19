@@ -12,11 +12,25 @@ namespace CTE
         /* field */
         public static LinkedList<Tweener> GameAnimation;
 
+        /// <summary>
+        /// 砖块工厂对应的预制体资源
+        /// </summary>
         public GameObject BlockFactory;
 
+        /// <summary>
+        /// 默认砖块工厂对应的场景引用
+        /// </summary>
         public BlockFactory CommonFactory { get; private set; }
-        public int MapWidth { get; private set; }
-        public int MapHeight { get; private set; }
+        [SerializeField]
+        private GameObject DebugGo;
+
+        public static int MapWidth { get; private set; }
+        public static int MapHeight { get; private set; }
+        /// <summary>
+        /// 当前允许用户点击
+        /// </summary>
+        public static bool AllowClick { get; set; }
+        public static Dictionary<Vector2Int, Vector2> BlockWorldPosition { get; private set; }
 
         /* ctor */
         private void Start()
@@ -26,6 +40,16 @@ namespace CTE
 
             MapWidth = GameData.Map.Blocks.GetLength(1);
             MapHeight = GameData.Map.Blocks.GetLength(0);
+
+            AllowClick = true;
+
+            BlockWorldPosition = new Dictionary<Vector2Int, Vector2>();
+            for (int indexY = 0; indexY < MapHeight; indexY++)
+                for (int indexX = 0; indexX < MapWidth; indexX++)
+                {
+                    (DebugGo.transform as RectTransform).anchoredPosition = GameData.Map.GetBlockAnchoredPosition(indexX, indexY);
+                    BlockWorldPosition.Add(new Vector2Int(indexX, indexY), DebugGo.transform.position);
+                }
 
             // 初始牌面
             for (int indexY = 0; indexY < MapHeight; indexY++)
@@ -43,6 +67,10 @@ namespace CTE
                         rectTransform.anchoredPosition = GameData.Map.GetBlockAnchoredPosition(indexX, indexY);
                     if (block.transform != null)
                         block.transform.SetParent(transform, false);
+                    // Color => Green || Red...
+                    GameData.BlockTypes[indexX, indexY] = block.BlockType;
+                    block.MapX = indexX;
+                    block.MapY = indexY;
                 }
         }
 
@@ -62,8 +90,55 @@ namespace CTE
         public static void ExitGame()
         {
             GameAnimation.Clear();
+            GameData.Blocks = null;
+            BlockWorldPosition = null;
             GameData.SaveOut();
             SceneManager.LoadScene("SelectionScene", LoadSceneMode.Single);
+        }
+
+        public static void TryRunOnce()
+        {
+            if (GameAnimation.Count > 0
+                && GameAnimation.First.Value.State == TweenerState.Finish)
+                GameAnimation.RemoveFirst();
+
+            if (GameAnimation.Count > 0)
+                GameAnimation.First.Value.DoIt();
+        }
+        /// <summary>
+        /// 检测牌面上标记为摧毁的砖块，触发并将动画指令入栈
+        /// </summary>
+        public static IEnumerator<Tweener> GameCheck(LogicTweener tweener, IBlock pointerBlock)
+        {
+            if (tweener is null)
+                throw new ArgumentNullException(nameof(tweener));
+            if (pointerBlock is null)
+                throw new ArgumentNullException(nameof(pointerBlock));
+
+            AllowClick = false;
+            pointerBlock.BreakCheck();
+
+            for (int indexY = 0; indexY < MapHeight; indexY++)
+                for (int indexX = 0; indexX < MapWidth; indexX++)
+                {
+                    IBlock block = GameData.Blocks[indexX, indexY];
+                    if (block.WillDestroy)
+                    {
+                        block.PlayBreakAnimation();
+                        yield return TimeTween.DoTime(0.2f);
+                    }
+                }
+
+            yield return TimeTween.DoTime(0.5f);
+
+            // block down animation
+
+            GameAnimation.RemoveFirst();
+            if (GameAnimation.Count > 0)
+                GameAnimation.First.Value.DoIt();
+
+            AllowClick = true;
+            yield break;
         }
     }
 }

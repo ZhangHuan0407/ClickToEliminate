@@ -31,7 +31,16 @@
         [ 1, 1, 1, 1, 1 ],
         [ 2, 1, 1, 1, 1 ],
         [ 2, 2, 2, 2, 2 ]
-      ]
+      ],
+      "MaxClickTime": 15,
+      "CellSize": {
+        "x": 100,
+        "y": 100
+      },
+      "LeftBottomCorner": {
+        "x": 0,
+        "y": -350
+      }
     },
     {
       "LevelIndex": 2,
