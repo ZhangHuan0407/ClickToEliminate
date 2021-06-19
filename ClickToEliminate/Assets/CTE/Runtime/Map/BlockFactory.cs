@@ -41,7 +41,7 @@ namespace CTE
         public IBlock CreateBlock(BlockType blockType)
         {
             if (blockType == BlockType.Color)
-                switch (UnityEngine.Random.Range(0, 3))
+                switch (UnityEngine.Random.Range(0, 4))
                 {
                     case 0:
                         blockType = BlockType.Red;

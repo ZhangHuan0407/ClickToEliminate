@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace Encoder.Editor
+namespace CTE.Editor
 {
     /// <summary>
     /// 修改本地存档

@@ -9,8 +9,20 @@ namespace CTE
         public BlockType ColorType = BlockType.Color;
         public BlockType BlockType => ColorType;
 
-        public int MapX { get; set; }
-        public int MapY { get; set; }
+        [SerializeField]
+        private int m_MapX;
+        [SerializeField]
+        private int m_MapY;
+        public int MapX
+        {
+            get => m_MapX;
+            set => m_MapX = value;
+        }
+        public int MapY
+        {
+            get => m_MapY;
+            set => m_MapY = value;
+        }
         public bool WillDestroy { get; set; }
         Transform IBlock.transform => transform;
 
@@ -23,22 +35,16 @@ namespace CTE
         public void OnClickBlockColorButton()
         {
             if (!CTEGame.AllowClick)
-            {
-                Debug.Log($"{nameof(CTEGame.AllowClick)} => {CTEGame.AllowClick}");
                 return;
-            }
 
-            LogicTweener logicTweener = new LogicTweener();
-            logicTweener.SetLogic(CTEGame.GameCheck(logicTweener, this));
-            CTEGame.GameAnimation.AddLast(logicTweener);
-            CTEGame.TryRunOnce();
+            CTEGame.TryRunOnce(this);
         }
 
 #if UNITY_EDITOR
-        private void Update()
-        {
-            Debug.DrawLine(transform.position, CTEGame.BlockWorldPosition[new Vector2Int(MapX, MapY)], Color.green);
-        }
+        //private void Update()
+        //{
+        //    Debug.DrawLine(transform.position, CTEGame.BlockWorldPosition[new Vector2Int(MapX, MapY)], Color.green);
+        //}
 #endif
 
         /* IBlock */

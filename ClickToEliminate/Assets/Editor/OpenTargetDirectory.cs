@@ -3,7 +3,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-namespace Encoder.Editor
+namespace CTE.Editor
 {
     /// <summary>
     /// 使用资源管理器打开目标文件夹

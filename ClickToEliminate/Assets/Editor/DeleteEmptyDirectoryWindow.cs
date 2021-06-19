@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace Encoder.Editor
+namespace CTE.Editor
 {
     /// <summary>
     /// 扫描并删除空文件夹
