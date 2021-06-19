@@ -221,9 +221,11 @@ namespace CTE
                                     (targetPosition2 - (Vector2)block2.transform.position).magnitude * 0.3f)
                                     .DoIt();
                                 waitAndDelayInvoke = true;
-                                goto AfterColumnGetBlock;
+                                goto AfterRowGetBlock;
                         }
                     }
+                AfterRowGetBlock:
+                    ;
                 }
             AfterColumnGetBlock:
                 ;
@@ -231,7 +233,7 @@ namespace CTE
 
             if (waitAndDelayInvoke)
             {
-                yield return TimeTween.DoTime(0.3f);
+                yield return TimeTween.DoTime(0.41f);
                 LogicTweener createAndShiftBlockTweener = new LogicTweener();
                 createAndShiftBlockTweener.SetLogic(CreateAndShiftBlock(createAndShiftBlockTweener));
                 GameAnimation.AddAfter(GameAnimation.First, createAndShiftBlockTweener);
